@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Password Generator</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+
+<section>
+    <h2 style="text-align:center;">Password Generator</h2>
+    <form action="#" onsubmit="return false;">
+
+        <div style="padding-bottom: 10px;" onclick="copyToClipboard(event)">
+            <fieldset>
+                <legend> Пароль :</legend>
+                <div class="input_box">
+                    <label for="result">
+                        <input type="text" name="result" disabled id="result" />
+                    </label>
+                    <span class="copy"></span>
+                </div>
+            </fieldset>
+        </div>
+
+        <div style="padding-bottom: 10px;">
+            <fieldset>
+                <legend>Длинна пароля : </legend>
+                <div class="input_box">
+                    <label for="pass">
+                        <input type="number" name="pass" id="pass" value="12" maxlength="8" onchange="generate()"/>
+                    </label>
+                </div>
+            </fieldset>
+        </div>
+
+        <div style="padding-bottom: 10px;">
+            <fieldset>
+                <legend>Выбор символов :</legend>
+                <div style="text-align:left;padding-bottom:10px;position:relative;left:-33px;">
+                    <input class="checkbox" type="checkbox" name="symbols" id="Up" onchange="generate()" checked/>
+                    <label class="text_box_font label" for="Up">Uppercase (A...Z)</label>
+                </div>
+
+                <div style="text-align:left;padding-bottom:10px;position:relative;left:-33px;">
+                    <span></span>
+                    <input class="checkbox" type="checkbox" name="symbols" id="Lw" onchange="generate()" checked/>
+                    <label class="text_box_font label" for="Lw">Lowercase (a...z)</label>
+                </div>
+
+                <div style="text-align:left;padding-bottom:10px;position:relative;left:-33px;">
+                    <input class="checkbox" type="checkbox" name="symbols" id="Sp" onchange="generate()" checked/>
+                    <label class="text_box_font label" for="Sp">Special ( *&+-!/" )</label>
+                </div>
+                <div style="text-align:left;padding-bottom:10px;position:relative;left:-33px;">
+                    <input class="checkbox" type="checkbox" name="symbols" id="Dg" onchange="generate()" checked/>
+                    <label class="text_box_font label" for="Dg">Digital (0...9)</label>
+                </div>
+            </fieldset>
+
+            <div>
+                <div class="button_box">
+                    <input class="btn-default" type="submit" name="submit" value="GENERATE" id="submit" onclick="generate()" />
+                </div>
+                <div class="button_box">
+                    <input class="btn-default" type="reset" name="reset" value="RESET" id="reset" />
+                </div>
+            </div>
+
+        </div>
+
+
+    </form>
+    <small>v1.0</small>
+</section>
+
+<script src="static/main.js"></script>
+
+</body>
+</html>
