@@ -1,48 +1,75 @@
-$RESULT = document.getElementById('result');
-$UPPER = document.getElementById('Up');
-$LOWER = document.getElementById('Lw');
-$SPECIAL = document.getElementById('Sp');
-$NUMBERS = document.getElementById('Dg');
-$PASSLEN = document.getElementById('pass');
+const resultEl = document.getElementById('result');
+const upperEl = document.getElementById('Up');
+const lowerEl = document.getElementById('Lw');
+const specialEl = document.getElementById('Sp');
+const numbersEl = document.getElementById('Dg');
+const lengthEl = document.getElementById('pass');
+const generateBtn = document.getElementById('generateBtn');
+const resetBtn = document.getElementById('resetBtn');
+const copyBtn = document.getElementById('copyBtn');
 
-function rndNumber(max_val) { // random integer
-    while (true) {
-        let randomInt = Math.round(Math.random() * 100)
-        if (randomInt <= max_val) {
-            return randomInt
-        }
+const charSets = {
+    upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+    lower: 'abcdefghijklmnopqrstuvwxyz',
+    special: '!@#$%^&*()',
+    numbers: '0123456789'
+};
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
+
+function generatePassword() {
+    const length = parseInt(lengthEl.value, 10);
+    if (length < 1 || length > 128) {
+        alert('Password length must be between 1 and 128.');
+        return;
+    }
+
+    let totalChars = '';
+    if (upperEl.checked) totalChars += charSets.upper;
+    if (lowerEl.checked) totalChars += charSets.lower;
+    if (specialEl.checked) totalChars += charSets.special;
+    if (numbersEl.checked) totalChars += charSets.numbers;
+
+    if (!totalChars) {
+        alert('Select at least one character set.');
+        return;
+    }
+
+    let password = '';
+    for (let i = 0; i < length; i++) {
+        const randomIndex = getRandomInt(totalChars.length);
+        password += totalChars[randomIndex];
+    }
+
+    resultEl.value = password;
+}
+
+function resetForm() {
+    lengthEl.value = 12;
+    upperEl.checked = true;
+    lowerEl.checked = true;
+    specialEl.checked = true;
+    numbersEl.checked = true;
+    resultEl.value = '';
+}
+
+function copyToClipboard() {
+    if (resultEl.value) {
+        navigator.clipboard.writeText(resultEl.value).then(() => {
+            copyBtn.classList.add('copied');
+            // Remove class after 1 second to revert icon
+            setTimeout(() => copyBtn.classList.remove('copied'), 1000);
+        }).catch(err => console.error('Copy failed:', err));
     }
 }
+// Event listeners
+generateBtn.addEventListener('click', generatePassword);
+resetBtn.addEventListener('click', resetForm);
+copyBtn.addEventListener('click', copyToClipboard);
+lengthEl.addEventListener('input', generatePassword);
+[upperEl, lowerEl, specialEl, numbersEl].forEach(el => el.addEventListener('change', generatePassword));
 
-function generate() {
-    let total_string = ''
-    let upper = $UPPER.checked ? 'QWERTYUIOPASDFGHJKLZXCVBNM': ''
-    let lower = $LOWER.checked ? 'qwertyuiopasdfghjklzxcvbnm': ''
-    let special = $SPECIAL.checked ? '+=,~`|/-!?.': ''
-    let digits = $NUMBERS.checked ? '0123456789': ''
-
-    total_string = upper + lower + special + digits
-
-    let passwd = null
-    if (total_string.length > 0) {
-        passwd = ''
-
-        for (let i=0; i< Number($PASSLEN.value); i++) {
-            let rndNum = rndNumber(total_string.length)
-            let char = total_string.charAt(rndNum);
-
-            if (passwd.indexOf(char) === -1) { // prevent duplicated symbols
-                passwd += char
-            } else {
-                i -= 1
-            }
-        }
-    }
-    $RESULT.value = passwd
-}
-
-generate();
-
-function copyToClipboard(e) {
-    navigator.clipboard.writeText($RESULT.value).then(()=>{}, (err)=>console.error(err))
-}
+// Initial generation
+generatePassword();
